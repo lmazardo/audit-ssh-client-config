@@ -1,0 +1,37 @@
+#!/usr/bin/awk -f
+
+$1 == "Host" {
+  host = $2
+  hosts_params[host] = ""
+  next;
+}
+
+$1 == "PasswordAuthentication" {
+  hosts_params[host, $1] = $2
+}
+
+$1 == "ChallengeResponseAuthentication" {
+  hosts_params[host, $1] = $2
+}
+
+END {
+  for (host_and_param in hosts_params) {
+    split(host_and_param, hosts, SUBSEP)
+
+    host_value = hosts[1]
+    pwd_auth_value = hosts_params[host_value, "PasswordAuthentication"]
+    chall_resp_auth_value = hosts_params[host_value, "ChallengeResponseAuthentication"]
+
+    if (host_value == "*" && pwd_auth_value == "") {
+      printf "ERROR: PasswordAuthentication is missing for host %s\n", host_value
+    } else if (host_value == "*" && pwd_auth_value == "yes") {
+      printf "ERROR: PasswordAuthentication is set to `yes` for host %s\n", host_value
+    } else if (pwd_auth_value == "yes") {
+      printf "WARNING: PasswordAuthentication is set to `yes` for host %s\n", host_value
+    }
+
+    if (chall_resp_auth_value == "yes") {
+      printf "WARNING: ChallengeResponseAuthentication is set to `yes` for host %s\n", host_value
+    }
+  }
+}
