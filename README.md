@@ -13,5 +13,5 @@ Scan an ssh client configuration file to report [good practices](https://stribik
 
 ```bash
 cd tests/
-./bash_unit test_*
+./bash_unit test_main.sh
 ```

@@ -25,17 +25,17 @@ END {
     if (host_value == "*" && pwd_auth_value == "") {
       printf "ERROR: PasswordAuthentication is missing for host %s\n", host_value
     } else if (host_value == "*" && pwd_auth_value == "yes") {
-      printf "ERROR: PasswordAuthentication is set to `yes` for host %s\n", host_value
+      printf "ERROR: PasswordAuthentication is set to 'yes' for host %s\n", host_value
     } else if (pwd_auth_value == "yes") {
-      printf "WARNING: PasswordAuthentication is set to `yes` for host %s\n", host_value
+      printf "WARNING: PasswordAuthentication is set to 'yes' for host %s\n", host_value
     }
 
     if (host_value == "*" && chall_resp_auth_value == "") {
       printf "ERROR: ChallengeResponseAuthentication is missing for host %s\n", host_value
     } else if (host_value == "*" && chall_resp_auth_value == "yes") {
-      printf "ERROR: ChallengeResponseAuthentication is set to `yes` for host %s\n", host_value
+      printf "ERROR: ChallengeResponseAuthentication is set to 'yes' for host %s\n", host_value
     } else if (chall_resp_auth_value == "yes") {
-      printf "WARNING: ChallengeResponseAuthentication is set to `yes` for host %s\n", host_value
+      printf "WARNING: ChallengeResponseAuthentication is set to 'yes' for host %s\n", host_value
     }
   }
 }
