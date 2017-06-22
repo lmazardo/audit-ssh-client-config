@@ -1,9 +1,16 @@
 #!/usr/bin/awk -f
 
+BEGIN {
+  count = 1
+}
+
 $1 == "Host" {
   host = $2
+
+  hosts[count] = host
   hosts_params[host] = ""
-  next;
+
+  count++
 }
 
 $1 == "PasswordAuthentication" ||
@@ -13,10 +20,8 @@ $1 == "KexAlgorithms" {
 }
 
 END {
-  for (host_and_param in hosts_params) {
-    split(host_and_param, hosts, SUBSEP)
-
-    host_value = hosts[1]
+  for (host in hosts) {
+    host_value = hosts[host]
 
     # These parameters can take boolean values ('yes' or 'no')
     pwd_auth_value = hosts_params[host_value, "PasswordAuthentication"]
