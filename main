@@ -6,11 +6,9 @@ $1 == "Host" {
   next;
 }
 
-$1 == "PasswordAuthentication" {
-  hosts_params[host, $1] = $2
-}
-
-$1 == "ChallengeResponseAuthentication" {
+$1 == "PasswordAuthentication" ||
+$1 == "ChallengeResponseAuthentication" ||
+$1 == "KexAlgorithms" {
   hosts_params[host, $1] = $2
 }
 
@@ -19,8 +17,14 @@ END {
     split(host_and_param, hosts, SUBSEP)
 
     host_value = hosts[1]
+
+    # These parameters can take boolean values ('yes' or 'no')
     pwd_auth_value = hosts_params[host_value, "PasswordAuthentication"]
     chall_resp_auth_value = hosts_params[host_value, "ChallengeResponseAuthentication"]
+
+    # These parameters can take list of values, separated by a coma ','
+    kex_algorithms_values = hosts_params[host_value, "KexAlgorithms"]
+
 
     if (host_value == "*" && pwd_auth_value == "") {
       printf "ERROR: PasswordAuthentication is missing for host %s\n", host_value
@@ -36,6 +40,21 @@ END {
       printf "ERROR: ChallengeResponseAuthentication is set to 'yes' for host %s\n", host_value
     } else if (chall_resp_auth_value == "yes") {
       printf "WARNING: ChallengeResponseAuthentication is set to 'yes' for host %s\n", host_value
+    }
+
+    if (kex_algorithms_values == "") {
+      printf "ERROR: KexAlgorithms are missing for host %s\n", host_value
+    }
+    split(kex_algorithms_values, kex_algorithms, ",")
+    for (i in kex_algorithms) {
+      if (kex_algorithms[i] != "curve25519-sha256@libssh.org" &&
+          kex_algorithms[i] != "diffie-hellman-group-exchange-sha256") {
+        if (host_value == "*") {
+          printf "ERROR: KexAlgorithms '%s' should be avoided for host %s\n", kex_algorithms[i], host_value
+        } else {
+          printf "WARNING: KexAlgorithms '%s' should be avoided for host %s\n", kex_algorithms[i], host_value
+        }
+      }
     }
   }
 }
