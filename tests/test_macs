@@ -1,0 +1,47 @@
+#
+# MACs
+#
+# Allowed MACs:
+# hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,
+# hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,
+# hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com
+#
+test_macs_different_from_allowed_ones_on_a_specific_host_returns_a_warning() {
+  cat << __EOF__ >"fake_bad_config"
+Host hostname.com
+  MACs weak-mac,hmac-sha2-512,other-weak-mac
+__EOF__
+
+  ../main fake_bad_config > result
+  expected_message="WARNING: MACs 'weak-mac' should be avoided for host hostname.com"
+  expected_second_message="WARNING: MACs 'other-weak-mac' should be avoided for host hostname.com"
+
+  assert 'grep "$expected_message" result'
+  assert 'grep "$expected_second_message" result'
+}
+
+test_macs_different_from_allowed_ones_on_star_host_returns_an_error() {
+  cat << __EOF__ >"fake_bad_config"
+Host *
+  MACs weak-mac,hmac-sha2-512,other-weak-mac
+__EOF__
+
+  ../main fake_bad_config > result
+  expected_message="ERROR: MACs 'weak-mac' should be avoided for host \*"
+  expected_second_message="ERROR: MACs 'other-weak-mac' should be avoided for host \*"
+
+  assert 'grep "$expected_message" result'
+  assert 'grep "$expected_second_message" result'
+}
+
+test_missing_macs_on_star_host_returns_an_error() {
+  cat << __EOF__ >"fake_bad_config"
+Host *
+  Username yoloer
+__EOF__
+
+  ../main fake_bad_config > result
+  expected_message="ERROR: MACs are missing for host \*"
+
+  assert 'grep "$expected_message" result'
+}

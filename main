@@ -18,7 +18,8 @@ $1 == "ChallengeResponseAuthentication" ||
 $1 == "HostKeyAlgorithms" ||
 $1 == "KexAlgorithms" ||
 $1 == "Ciphers" ||
-$1 == "PubkeyAuthentication" {
+$1 == "PubkeyAuthentication" ||
+$1 == "MACs" {
   hosts_params[host, $1] = $2
 }
 
@@ -35,6 +36,7 @@ END {
     kex_algorithms_values = hosts_params[host_value, "KexAlgorithms"]
     ciphers_values = hosts_params[host_value, "Ciphers"]
     host_key_algorithms_values = hosts_params[host_value, "HostKeyAlgorithms"]
+    macs_values = hosts_params[host_value, "MACs"]
 
     if (host_value == "*") {
       level="ERROR"
@@ -95,6 +97,23 @@ END {
           host_key_algorithms[i] != "ssh-rsa-cert-v01@openssh.com" &&
           host_key_algorithms[i] != "ssh-ed25519,ssh-rsa") {
         printf "%s: HostKeyAlgorithms '%s' should be avoided for host %s\n", level, host_key_algorithms[i], host_value
+      }
+    }
+
+    if (macs_values == "") {
+      printf "%s: MACs are missing for host %s\n", level, host_value
+    }
+    split(macs_values, macs, ",")
+    for (i in macs) {
+      if (macs[i] != "hmac-sha2-512-etm@openssh.com" &&
+          macs[i] != "hmac-sha2-256-etm@openssh.com" &&
+          macs[i] != "hmac-ripemd160-etm@openssh.com" &&
+          macs[i] != "umac-128-etm@openssh.com" &&
+          macs[i] != "hmac-sha2-512" &&
+          macs[i] != "hmac-sha2-256" &&
+          macs[i] != "hmac-ripemd160" &&
+          macs[i] != "umac-128@openssh.com") {
+        printf "%s: MACs '%s' should be avoided for host %s\n", level, macs[i], host_value
       }
     }
   }
