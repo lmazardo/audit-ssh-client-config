@@ -2,6 +2,7 @@
 
 source ./test_password_authentication
 source ./test_challenge_response_authentication
+source ./test_host_key_algorithms
 source ./test_kex_algorithms
 source ./test_ciphers
 source ./test_pubkey_authentication
@@ -14,10 +15,10 @@ __EOF__
 
   ../main fake_bad_config > result
 
-  # PasswordAuthentication, ChallengeResponseAuthentication,
+  # PasswordAuthentication, ChallengeResponseAuthentication, HostKeyAlgorithms
   # KexAlgorithms, Ciphers, PubkeyAuthentication
   # are missing and therefore trigger an error
-  assert_equals 5 "$(grep -c ERROR result)"
+  assert_equals 6 "$(grep -c ERROR result)"
 }
 
 
