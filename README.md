@@ -5,7 +5,9 @@ Scan an ssh client configuration file to report [good practices](https://stribik
 ## usage
 
 ```bash
-./main.sh CONFIG_FILE
+git clone git@github.com:Pamplemousse/audit-ssh-client-config.git
+cd audit-ssh-client-config
+./main CONFIG_FILE
 ```
 
 
