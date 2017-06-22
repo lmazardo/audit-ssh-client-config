@@ -19,7 +19,8 @@ $1 == "HostKeyAlgorithms" ||
 $1 == "KexAlgorithms" ||
 $1 == "Ciphers" ||
 $1 == "PubkeyAuthentication" ||
-$1 == "MACs" {
+$1 == "MACs" ||
+$1 == "UseRoaming" {
   hosts_params[host, $1] = $2
 }
 
@@ -31,6 +32,7 @@ END {
     pwd_auth_value = hosts_params[host_value, "PasswordAuthentication"]
     chall_resp_auth_value = hosts_params[host_value, "ChallengeResponseAuthentication"]
     pubkey_auth_value = hosts_params[host_value, "PubkeyAuthentication"]
+    use_roaming_value = hosts_params[host_value, "UseRoaming"]
 
     # These parameters can take list of values, separated by a coma ','
     kex_algorithms_values = hosts_params[host_value, "KexAlgorithms"]
@@ -61,6 +63,13 @@ END {
     } else if (pubkey_auth_value == "yes") {
       printf "%s: PubkeyAuthentication is set to 'yes' for host %s\n", level, host_value
     }
+
+    if (use_roaming_value == "") {
+      printf "%s: UseRoaming is missing for host %s\n", level, host_value
+    } else if (use_roaming_value == "yes") {
+      printf "%s: UseRoaming is set to 'yes' for host %s\n", level, host_value
+    }
+
 
     if (kex_algorithms_values == "") {
       printf "%s: KexAlgorithms are missing for host %s\n", level, host_value

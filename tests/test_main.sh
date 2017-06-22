@@ -7,6 +7,7 @@ source ./test_kex_algorithms
 source ./test_ciphers
 source ./test_pubkey_authentication
 source ./test_macs
+source ./test_use_roaming
 
 
 test_each_message_is_displayed_only_once() {
@@ -17,9 +18,9 @@ __EOF__
   ../main fake_bad_config > result
 
   # PasswordAuthentication, ChallengeResponseAuthentication, HostKeyAlgorithms
-  # KexAlgorithms, Ciphers, PubkeyAuthentication, MACs
+  # KexAlgorithms, Ciphers, PubkeyAuthentication, MACs, UseRoaming
   # are missing and therefore trigger an error
-  assert_equals 7 "$(grep -c ERROR result)"
+  assert_equals 8 "$(grep -c ERROR result)"
 }
 
 
