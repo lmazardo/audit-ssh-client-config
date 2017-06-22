@@ -15,7 +15,8 @@ $1 == "Host" {
 
 $1 == "PasswordAuthentication" ||
 $1 == "ChallengeResponseAuthentication" ||
-$1 == "KexAlgorithms" {
+$1 == "KexAlgorithms" ||
+$1 == "Ciphers" {
   hosts_params[host, $1] = $2
 }
 
@@ -29,6 +30,7 @@ END {
 
     # These parameters can take list of values, separated by a coma ','
     kex_algorithms_values = hosts_params[host_value, "KexAlgorithms"]
+    ciphers_values = hosts_params[host_value, "Ciphers"]
 
     if (host_value == "*") {
       level="ERROR"
@@ -56,6 +58,21 @@ END {
       if (kex_algorithms[i] != "curve25519-sha256@libssh.org" &&
           kex_algorithms[i] != "diffie-hellman-group-exchange-sha256") {
         printf "%s: KexAlgorithms '%s' should be avoided for host %s\n", level, kex_algorithms[i], host_value
+      }
+    }
+
+    if (ciphers_values == "") {
+      printf "%s: Ciphers are missing for host %s\n", level, host_value
+    }
+    split(ciphers_values, ciphers, ",")
+    for (i in ciphers) {
+      if (ciphers[i] != "chacha20-poly1305@openssh.com" &&
+          ciphers[i] != "aes256-gcm@openssh.com" &&
+          ciphers[i] != "aes128-gcm@openssh.com" &&
+          ciphers[i] != "aes256-ctr" &&
+          ciphers[i] != "aes192-ctr" &&
+          ciphers[i] != "aes128-ctr") {
+        printf "%s: Ciphers '%s' should be avoided for host %s\n", level, ciphers[i], host_value
       }
     }
   }

@@ -3,6 +3,7 @@
 source ./test_password_authentication
 source ./test_challenge_response_authentication
 source ./test_kex_algorithms
+source ./test_ciphers
 
 
 test_each_message_is_displayed_only_once() {
@@ -13,9 +14,9 @@ __EOF__
   ../main fake_bad_config > result
 
   # PasswordAuthentication, ChallengeResponseAuthentication,
-  # KexAlgorithms
+  # KexAlgorithms, Ciphers
   # are missing and therefore trigger an error
-  assert_equals 3 "$(grep -c ERROR result)"
+  assert_equals 4 "$(grep -c ERROR result)"
 }
 
 
