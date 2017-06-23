@@ -60,8 +60,8 @@ END {
 
     if (pubkey_auth_value == "") {
       printf "%s: PubkeyAuthentication is missing for host %s\n", level, host_value
-    } else if (pubkey_auth_value == "yes") {
-      printf "%s: PubkeyAuthentication is set to 'yes' for host %s\n", level, host_value
+    } else if (pubkey_auth_value == "no") {
+      printf "%s: PubkeyAuthentication is set to 'no' for host %s\n", level, host_value
     }
 
     if (use_roaming_value == "") {

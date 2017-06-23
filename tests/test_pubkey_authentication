@@ -2,29 +2,29 @@
 # PubkeyAuthentication
 #
 
-# test_pubkey_authentication_set_to_no_on_a_specific_host_returns_a_warning() {
-#   cat << __EOF__ >"fake_bad_config"
-# Host hostname.com
-#   PubkeyAuthentication no
-# __EOF__
-#
-#   ../main fake_bad_config > result
-#   expected_message="WARNING: PubkeyAuthentication is set to 'no' for host hostname.com"
-#
-#   assert 'grep "$expected_message" result'
-# }
-#
-# test_pubkey_authentication_set_to_no_on_star_host_returns_an_error() {
-#   cat << __EOF__ >"fake_bad_config"
-# Host *
-#   PubkeyAuthentication no
-# __EOF__
-#
-#   ../main fake_bad_config > result
-#   expected_message="ERROR: PubkeyAuthentication is set to 'yes' for host \*"
-#
-#   assert 'grep "$expected_message" result'
-# }
+test_pubkey_authentication_set_to_no_on_a_specific_host_returns_a_warning() {
+  cat << __EOF__ >"fake_bad_config"
+Host hostname.com
+  PubkeyAuthentication no
+__EOF__
+
+  ../main fake_bad_config > result
+  expected_message="WARNING: PubkeyAuthentication is set to 'no' for host hostname.com"
+
+  assert 'grep "$expected_message" result'
+}
+
+test_pubkey_authentication_set_to_no_on_star_host_returns_an_error() {
+  cat << __EOF__ >"fake_bad_config"
+Host *
+  PubkeyAuthentication no
+__EOF__
+
+  ../main fake_bad_config > result
+  expected_message="ERROR: PubkeyAuthentication is set to 'no' for host \*"
+
+  assert 'grep "$expected_message" result'
+}
 
 test_missing_pubkey_authentication_on_star_host_returns_an_error() {
   cat << __EOF__ >"fake_bad_config"
