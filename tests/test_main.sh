@@ -2,20 +2,20 @@
 TESTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 setup() {
-  MAIN="$TESTS_DIR/../main"
+  MAIN="$TESTS_DIR/../audit-ssh-config.sh"
   FAKE_BAD_CONFIG="$TESTS_DIR/fake_bad_config"
   RESULT="$TESTS_DIR/result"
 }
 
 
-source "$TESTS_DIR/test_password_authentication"
-source "$TESTS_DIR/test_challenge_response_authentication"
-source "$TESTS_DIR/test_host_key_algorithms"
-source "$TESTS_DIR/test_kex_algorithms"
-source "$TESTS_DIR/test_ciphers"
-source "$TESTS_DIR/test_pubkey_authentication"
-source "$TESTS_DIR/test_macs"
-source "$TESTS_DIR/test_use_roaming"
+source "$TESTS_DIR/ssh_parameters/test_password_authentication"
+source "$TESTS_DIR/ssh_parameters/test_challenge_response_authentication"
+source "$TESTS_DIR/ssh_parameters/test_host_key_algorithms"
+source "$TESTS_DIR/ssh_parameters/test_kex_algorithms"
+source "$TESTS_DIR/ssh_parameters/test_ciphers"
+source "$TESTS_DIR/ssh_parameters/test_pubkey_authentication"
+source "$TESTS_DIR/ssh_parameters/test_macs"
+source "$TESTS_DIR/ssh_parameters/test_use_roaming"
 
 
 test_each_message_is_displayed_only_once() {
