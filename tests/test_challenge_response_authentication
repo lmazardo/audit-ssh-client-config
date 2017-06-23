@@ -2,37 +2,37 @@
 # ChallengeResponseAuthentication
 #
 test_challenge_response_authentication_set_to_yes_on_a_specific_host_returns_a_warning() {
-  cat << __EOF__ >"fake_bad_config"
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host hostname.com
   ChallengeResponseAuthentication yes
 __EOF__
 
-  ../main fake_bad_config > result
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
   expected_message="WARNING: ChallengeResponseAuthentication is set to 'yes' for host hostname.com"
 
-  assert 'grep "$expected_message" result'
+  assert 'grep "$expected_message" ${RESULT}'
 }
 
 test_challenge_response_authentication_set_to_yes_on_star_host_returns_an_error() {
-  cat << __EOF__ >"fake_bad_config"
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host *
   ChallengeResponseAuthentication yes
 __EOF__
 
-  ../main fake_bad_config > result
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
   expected_message="ERROR: ChallengeResponseAuthentication is set to 'yes' for host \*"
 
-  assert 'grep "$expected_message" result'
+  assert 'grep "$expected_message" ${RESULT}'
 }
 
 test_missing_challenge_response_authentication_on_star_host_returns_an_error() {
-  cat << __EOF__ >"fake_bad_config"
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host *
   Username yoloer
 __EOF__
 
-  ../main fake_bad_config > result
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
   expected_message="ERROR: ChallengeResponseAuthentication is missing for host \*"
 
-  assert 'grep "$expected_message" result'
+  assert 'grep "$expected_message" ${RESULT}'
 }
