@@ -5,9 +5,10 @@ Scan an ssh client configuration file to report [good practices](https://stribik
 ## usage
 
 ```bash
-git clone git@github.com:Pamplemousse/audit-ssh-client-config.git
-cd audit-ssh-client-config
-./main CONFIG_FILE
+./audit-ssh-config.sh [-h] CONFIG_FILE
+  --warning = filter messages to *only* display WARNINGs
+  --error = filter messages to *only* display ERRORs
+  -h = display this help
 ```
 
 

@@ -1,0 +1,47 @@
+test_explains_how_to_use_if_no_config_file_is_given() {
+  "${MAIN}" &> "$RESULT"
+
+  expected_message="An ssh config file needs to be passed as a parameter."
+
+  assert 'grep usage ${RESULT}'
+  assert 'grep "$expected_message" ${RESULT}'
+}
+
+test_h_option_displays_help_message() {
+  "${MAIN}" -h &> "$RESULT"
+
+  expected_message="usage : audit-ssh-config.sh [-h] CONFIG_FILE
+audit an ssh client configuration file
+--warning = filter messages to only display WARNINGs
+--error = filter messages to only display ERRORs
+-h = display this help"
+  actual_message=$(cat "${RESULT}")
+
+  assert_equals "$expected_message" "$actual_message"
+}
+
+test_warning_option_only_displays_warnings() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  ChallengeResponseAuthentication yes
+Host *
+    ChallengeResponseAuthentication yes
+__EOF__
+
+  "${MAIN}" --warning "${FAKE_BAD_CONFIG}" > "${RESULT}"
+
+  assert_fail "grep ERROR ${RESULT}"
+}
+
+test_error_option_only_displays_warnings() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  ChallengeResponseAuthentication yes
+Host *
+    ChallengeResponseAuthentication yes
+__EOF__
+
+  "${MAIN}" --error "${FAKE_BAD_CONFIG}" > "${RESULT}"
+
+  assert_fail "grep WARNING ${RESULT}"
+}

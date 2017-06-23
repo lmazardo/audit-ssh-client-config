@@ -17,6 +17,7 @@ source "$TESTS_DIR/ssh_parameters/test_pubkey_authentication"
 source "$TESTS_DIR/ssh_parameters/test_macs"
 source "$TESTS_DIR/ssh_parameters/test_use_roaming"
 
+source "$TESTS_DIR/test_script_usage"
 
 test_each_message_is_displayed_only_once() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"
@@ -33,6 +34,6 @@ __EOF__
 
 
 teardown() {
-  rm "${FAKE_BAD_CONFIG}"
-  rm "${RESULT}"
+  rm "${FAKE_BAD_CONFIG}" &> /dev/null
+  rm "${RESULT}"* &> /dev/null
 }
