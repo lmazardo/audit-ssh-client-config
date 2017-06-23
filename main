@@ -104,7 +104,8 @@ END {
     for (i in host_key_algorithms) {
       if (host_key_algorithms[i] != "ssh-ed25519-cert-v01@openssh.com" &&
           host_key_algorithms[i] != "ssh-rsa-cert-v01@openssh.com" &&
-          host_key_algorithms[i] != "ssh-ed25519,ssh-rsa") {
+          host_key_algorithms[i] != "ssh-ed25519" &&
+          host_key_algorithms[i] != "ssh-rsa") {
         printf "%s: HostKeyAlgorithms '%s' should be avoided for host %s\n", level, host_key_algorithms[i], host_value
       }
     }
