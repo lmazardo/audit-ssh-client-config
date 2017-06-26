@@ -5,41 +5,41 @@
 # curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
 #
 test_kexalgorithms_different_from_allowed_ones_on_a_specific_host_returns_a_warning() {
-  cat << __EOF__ >"fake_bad_config"
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host hostname.com
   KexAlgorithms weak-kex-algorithm,curve25519-sha256@libssh.org,other-weak-kex-algorithm
 __EOF__
 
-  ../main fake_bad_config > result
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
   expected_message="WARNING: KexAlgorithms 'weak-kex-algorithm' should be avoided for host hostname.com"
   expected_second_message="WARNING: KexAlgorithms 'other-weak-kex-algorithm' should be avoided for host hostname.com"
 
-  assert 'grep "$expected_message" result'
-  assert 'grep "$expected_second_message" result'
+  assert 'grep "$expected_message" ${RESULT}'
+  assert 'grep "$expected_second_message" ${RESULT}'
 }
 
 test_kexalgorithms_different_from_allowed_ones_on_star_host_returns_an_error() {
-  cat << __EOF__ >"fake_bad_config"
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host *
   KexAlgorithms weak-kex-algorithm,curve25519-sha256@libssh.org,other-weak-kex-algorithm
 __EOF__
 
-  ../main fake_bad_config > result
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
   expected_message="ERROR: KexAlgorithms 'weak-kex-algorithm' should be avoided for host \*"
   expected_second_message="ERROR: KexAlgorithms 'other-weak-kex-algorithm' should be avoided for host \*"
 
-  assert 'grep "$expected_message" result'
-  assert 'grep "$expected_second_message" result'
+  assert 'grep "$expected_message" ${RESULT}'
+  assert 'grep "$expected_second_message" ${RESULT}'
 }
 
 test_missing_kexalgorithms_on_star_host_returns_an_error() {
-  cat << __EOF__ >"fake_bad_config"
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host *
   Username yoloer
 __EOF__
 
-  ../main fake_bad_config > result
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
   expected_message="ERROR: KexAlgorithms are missing for host \*"
 
-  assert 'grep "$expected_message" result'
+  assert 'grep "$expected_message" ${RESULT}'
 }

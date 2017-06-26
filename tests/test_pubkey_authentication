@@ -3,37 +3,37 @@
 #
 
 test_pubkey_authentication_set_to_no_on_a_specific_host_returns_a_warning() {
-  cat << __EOF__ >"fake_bad_config"
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host hostname.com
   PubkeyAuthentication no
 __EOF__
 
-  ../main fake_bad_config > result
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
   expected_message="WARNING: PubkeyAuthentication is set to 'no' for host hostname.com"
 
-  assert 'grep "$expected_message" result'
+  assert 'grep "$expected_message" ${RESULT}'
 }
 
 test_pubkey_authentication_set_to_no_on_star_host_returns_an_error() {
-  cat << __EOF__ >"fake_bad_config"
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host *
   PubkeyAuthentication no
 __EOF__
 
-  ../main fake_bad_config > result
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
   expected_message="ERROR: PubkeyAuthentication is set to 'no' for host \*"
 
-  assert 'grep "$expected_message" result'
+  assert 'grep "$expected_message" ${RESULT}'
 }
 
 test_missing_pubkey_authentication_on_star_host_returns_an_error() {
-  cat << __EOF__ >"fake_bad_config"
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host *
   Username yoloer
 __EOF__
 
-  ../main fake_bad_config > result
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
   expected_message="ERROR: PubkeyAuthentication is missing for host \*"
 
-  assert 'grep "$expected_message" result'
+  assert 'grep "$expected_message" ${RESULT}'
 }

@@ -6,42 +6,42 @@
 # ssh-rsa
 #
 test_host_key_algorithms_different_from_allowed_ones_on_a_specific_host_returns_a_warning() {
-  cat << __EOF__ >"fake_bad_config"
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host hostname.com
   HostKeyAlgorithms weak-host-key-algorithm,ssh-rsa,other-weak-host-key-algorithm
 __EOF__
 
-  ../main fake_bad_config > result
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
 
   expected_message="WARNING: HostKeyAlgorithms 'weak-host-key-algorithm' should be avoided for host hostname.com"
   expected_second_message="WARNING: HostKeyAlgorithms 'other-weak-host-key-algorithm' should be avoided for host hostname.com"
 
-  assert 'grep "$expected_message" result'
-  assert 'grep "$expected_second_message" result'
+  assert 'grep "$expected_message" ${RESULT}'
+  assert 'grep "$expected_second_message" ${RESULT}'
 }
 
 test_host_key_algorithm_different_from_allowed_ones_on_star_host_returns_an_error() {
-  cat << __EOF__ >"fake_bad_config"
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host *
   HostKeyAlgorithms weak-host-key-algorithm,ssh-rsa,other-weak-host-key-algorithm
 __EOF__
 
-  ../main fake_bad_config > result
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
   expected_message="ERROR: HostKeyAlgorithms 'weak-host-key-algorithm' should be avoided for host \*"
   expected_second_message="ERROR: HostKeyAlgorithms 'other-weak-host-key-algorithm' should be avoided for host \*"
 
-  assert 'grep "$expected_message" result'
-  assert 'grep "$expected_second_message" result'
+  assert 'grep "$expected_message" ${RESULT}'
+  assert 'grep "$expected_second_message" ${RESULT}'
 }
 
 test_missing_host_key_algorithms_on_star_host_returns_an_error() {
-  cat << __EOF__ >"fake_bad_config"
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host *
   Username yoloer
 __EOF__
 
-  ../main fake_bad_config > result
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
   expected_message="ERROR: HostKeyAlgorithms are missing for host \*"
 
-  assert 'grep "$expected_message" result'
+  assert 'grep "$expected_message" ${RESULT}'
 }
