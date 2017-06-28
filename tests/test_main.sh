@@ -32,6 +32,17 @@ __EOF__
   assert_equals 8 "$(grep -c ERROR "${RESULT}")"
 }
 
+test_missing_parameters_on_specific_hosts_are_not_reported() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  Username yolo
+__EOF__
+
+  "${MAIN}" "${FAKE_BAD_CONFIG}" > "${RESULT}"
+
+  assert_equals 0 "$(wc -l "${RESULT}" | cut -d' ' -f1)"
+}
+
 
 teardown() {
   rm "${FAKE_BAD_CONFIG}" &> /dev/null

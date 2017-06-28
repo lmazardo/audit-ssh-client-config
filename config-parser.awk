@@ -46,32 +46,32 @@ END {
       level="WARNING"
     }
 
-    if (pwd_auth_value == "") {
+    if (pwd_auth_value == "" && host_value == "*") {
       printf "%s: PasswordAuthentication is missing for host %s\n", level, host_value
     } else if (pwd_auth_value == "yes") {
       printf "%s: PasswordAuthentication is set to 'yes' for host %s\n", level, host_value
     }
 
-    if (chall_resp_auth_value == "") {
+    if (chall_resp_auth_value == "" && host_value == "*") {
       printf "%s: ChallengeResponseAuthentication is missing for host %s\n", level, host_value
     } else if (chall_resp_auth_value == "yes") {
       printf "%s: ChallengeResponseAuthentication is set to 'yes' for host %s\n", level, host_value
     }
 
-    if (pubkey_auth_value == "") {
+    if (pubkey_auth_value == "" && host_value == "*") {
       printf "%s: PubkeyAuthentication is missing for host %s\n", level, host_value
     } else if (pubkey_auth_value == "no") {
       printf "%s: PubkeyAuthentication is set to 'no' for host %s\n", level, host_value
     }
 
-    if (use_roaming_value == "") {
+    if (use_roaming_value == "" && host_value == "*") {
       printf "%s: UseRoaming is missing for host %s\n", level, host_value
     } else if (use_roaming_value == "yes") {
       printf "%s: UseRoaming is set to 'yes' for host %s\n", level, host_value
     }
 
 
-    if (kex_algorithms_values == "") {
+    if (kex_algorithms_values == "" && host_value == "*") {
       printf "%s: KexAlgorithms are missing for host %s\n", level, host_value
     }
     split(kex_algorithms_values, kex_algorithms, ",")
@@ -82,7 +82,7 @@ END {
       }
     }
 
-    if (ciphers_values == "") {
+    if (ciphers_values == "" && host_value == "*") {
       printf "%s: Ciphers are missing for host %s\n", level, host_value
     }
     split(ciphers_values, ciphers, ",")
@@ -97,7 +97,7 @@ END {
       }
     }
 
-    if (host_key_algorithms_values == "") {
+    if (host_key_algorithms_values == "" && host_value == "*") {
       printf "%s: HostKeyAlgorithms are missing for host %s\n", level, host_value
     }
     split(host_key_algorithms_values, host_key_algorithms, ",")
@@ -110,7 +110,7 @@ END {
       }
     }
 
-    if (macs_values == "") {
+    if (macs_values == "" && host_value == "*") {
       printf "%s: MACs are missing for host %s\n", level, host_value
     }
     split(macs_values, macs, ",")
