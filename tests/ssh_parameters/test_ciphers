@@ -19,7 +19,7 @@ __EOF__
   assert 'grep "$expected_second_message" ${RESULT}'
 }
 
-test_kexalgorithms_different_from_allowed_ones_on_star_host_returns_an_error() {
+test_ciphers_different_from_allowed_ones_on_star_host_returns_an_error() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host *
   Ciphers weak-cipher,aes128-ctr,other-weak-cipher
