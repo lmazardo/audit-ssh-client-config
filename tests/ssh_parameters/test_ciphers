@@ -5,42 +5,62 @@
 # chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,
 # aes256-ctr,aes192-ctr,aes128-ctr
 #
-test_ciphers_different_from_allowed_ones_on_a_specific_host_returns_a_warning() {
+test_ciphers_different_from_allowed_ones_on_any_host_is_reported() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host hostname.com
-  Ciphers weak-cipher,aes128-ctr,other-weak-cipher
-__EOF__
-
-  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
-  expected_message="WARNING: Ciphers 'weak-cipher' should be avoided for host hostname.com"
-  expected_second_message="WARNING: Ciphers 'other-weak-cipher' should be avoided for host hostname.com"
-
-  assert 'grep "$expected_message" ${RESULT}'
-  assert 'grep "$expected_second_message" ${RESULT}'
-}
-
-test_ciphers_different_from_allowed_ones_on_star_host_returns_an_error() {
-  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+  Ciphers weak-cipher
 Host *
-  Ciphers weak-cipher,aes128-ctr,other-weak-cipher
+  Ciphers weak-cipher
 __EOF__
 
   ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
-  expected_message="ERROR: Ciphers 'weak-cipher' should be avoided for host \*"
-  expected_second_message="ERROR: Ciphers 'other-weak-cipher' should be avoided for host \*"
+  expected_warning_message="WARNING: Ciphers should be set to 'chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr' for host hostname.com"
+  expected_error_message="ERROR: Ciphers should be set to 'chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr' for host \*"
 
-  assert 'grep "$expected_message" ${RESULT}'
-  assert 'grep "$expected_second_message" ${RESULT}'
+  assert 'grep "$expected_warning_message" ${RESULT}'
+  assert 'grep "$expected_error_message" ${RESULT}'
 }
 
-test_missing_ciphers_on_star_host_returns_an_error() {
+test_missing_cipher_on_any_host_is_reported() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
+Host *
+  Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
+__EOF__
+
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
+  expected_warning_message="WARNING: Ciphers should be set to 'chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr' for host hostname.com"
+  expected_error_message="ERROR: Ciphers should be set to 'chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr' for host \*"
+
+  assert 'grep "$expected_warning_message" ${RESULT}'
+  assert 'grep "$expected_error_message" ${RESULT}'
+}
+
+test_ciphers_in_wrong_order_on_any_host_is_reported() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  Ciphers aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr,chacha20-poly1305@openssh.com
+Host *
+  Ciphers aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr,chacha20-poly1305@openssh.com
+__EOF__
+
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
+  expected_warning_message="WARNING: Ciphers should be set to 'chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr' for host hostname.com"
+  expected_error_message="ERROR: Ciphers should be set to 'chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr' for host \*"
+
+  assert 'grep "$expected_warning_message" ${RESULT}'
+  assert 'grep "$expected_error_message" ${RESULT}'
+}
+
+test_missing_ciphers_statement_on_star_host_returns_an_error() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host *
   Username yoloer
 __EOF__
 
   ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
-  expected_message="ERROR: Ciphers are missing for host \*"
+  expected_message="ERROR: Ciphers is missing for host \*"
 
   assert 'grep "$expected_message" ${RESULT}'
 }

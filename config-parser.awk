@@ -58,60 +58,32 @@ END {
     macs_values = hosts_params[host_value, "MACs"]
 
 
+    expected_kex_algorithms = "curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256"
     if (kex_algorithms_values == "" && host_value == "*") {
-      printf "%s: KexAlgorithms are missing for host %s\n", level, host_value
-    }
-    split(kex_algorithms_values, kex_algorithms, ",")
-    for (i in kex_algorithms) {
-      if (kex_algorithms[i] != "curve25519-sha256@libssh.org" &&
-          kex_algorithms[i] != "diffie-hellman-group-exchange-sha256") {
-        printf "%s: KexAlgorithms '%s' should be avoided for host %s\n", level, kex_algorithms[i], host_value
-      }
+      printf "%s: KexAlgorithms is missing for host %s\n", level, host_value
+    } else if (kex_algorithms_values != "" && kex_algorithms_values != expected_kex_algorithms) {
+      printf "%s: KexAlgorithms should be set to '%s' for host %s\n", level, expected_kex_algorithms, host_value
     }
 
+    expected_ciphers = "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
     if (ciphers_values == "" && host_value == "*") {
-      printf "%s: Ciphers are missing for host %s\n", level, host_value
-    }
-    split(ciphers_values, ciphers, ",")
-    for (i in ciphers) {
-      if (ciphers[i] != "chacha20-poly1305@openssh.com" &&
-          ciphers[i] != "aes256-gcm@openssh.com" &&
-          ciphers[i] != "aes128-gcm@openssh.com" &&
-          ciphers[i] != "aes256-ctr" &&
-          ciphers[i] != "aes192-ctr" &&
-          ciphers[i] != "aes128-ctr") {
-        printf "%s: Ciphers '%s' should be avoided for host %s\n", level, ciphers[i], host_value
-      }
+      printf "%s: Ciphers is missing for host %s\n", level, host_value
+    } else if (ciphers_values != "" && ciphers_values != expected_ciphers) {
+      printf "%s: Ciphers should be set to '%s' for host %s\n", level, expected_ciphers, host_value
     }
 
+    expected_host_key_algorithms = "ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa"
     if (host_key_algorithms_values == "" && host_value == "*") {
-      printf "%s: HostKeyAlgorithms are missing for host %s\n", level, host_value
-    }
-    split(host_key_algorithms_values, host_key_algorithms, ",")
-    for (i in host_key_algorithms) {
-      if (host_key_algorithms[i] != "ssh-ed25519-cert-v01@openssh.com" &&
-          host_key_algorithms[i] != "ssh-rsa-cert-v01@openssh.com" &&
-          host_key_algorithms[i] != "ssh-ed25519" &&
-          host_key_algorithms[i] != "ssh-rsa") {
-        printf "%s: HostKeyAlgorithms '%s' should be avoided for host %s\n", level, host_key_algorithms[i], host_value
-      }
+      printf "%s: HostKeyAlgorithms is missing for host %s\n", level, host_value
+    } else if (host_key_algorithms_values != "" && host_key_algorithms_values != expected_host_key_algorithms) {
+      printf "%s: HostKeyAlgorithms should be set to '%s' for host %s\n", level, expected_host_key_algorithms, host_value
     }
 
+    expected_macs = "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com"
     if (macs_values == "" && host_value == "*") {
-      printf "%s: MACs are missing for host %s\n", level, host_value
-    }
-    split(macs_values, macs, ",")
-    for (i in macs) {
-      if (macs[i] != "hmac-sha2-512-etm@openssh.com" &&
-          macs[i] != "hmac-sha2-256-etm@openssh.com" &&
-          macs[i] != "hmac-ripemd160-etm@openssh.com" &&
-          macs[i] != "umac-128-etm@openssh.com" &&
-          macs[i] != "hmac-sha2-512" &&
-          macs[i] != "hmac-sha2-256" &&
-          macs[i] != "hmac-ripemd160" &&
-          macs[i] != "umac-128@openssh.com") {
-        printf "%s: MACs '%s' should be avoided for host %s\n", level, macs[i], host_value
-      }
+      printf "%s: MACs is missing for host %s\n", level, host_value
+    } else if (macs_values != "" && macs_values != expected_macs) {
+      printf "%s: MACs should be set to '%s' for host %s\n", level, expected_macs, host_value
     }
   }
 }

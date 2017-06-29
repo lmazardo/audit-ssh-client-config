@@ -5,43 +5,63 @@
 # ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,
 # ssh-rsa
 #
-test_host_key_algorithms_different_from_allowed_ones_on_a_specific_host_returns_a_warning() {
+test_host_key_algorithms_different_from_allowed_ones_on_any_host_is_reported() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host hostname.com
-  HostKeyAlgorithms weak-host-key-algorithm,ssh-rsa,other-weak-host-key-algorithm
-__EOF__
-
-  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
-
-  expected_message="WARNING: HostKeyAlgorithms 'weak-host-key-algorithm' should be avoided for host hostname.com"
-  expected_second_message="WARNING: HostKeyAlgorithms 'other-weak-host-key-algorithm' should be avoided for host hostname.com"
-
-  assert 'grep "$expected_message" ${RESULT}'
-  assert 'grep "$expected_second_message" ${RESULT}'
-}
-
-test_host_key_algorithm_different_from_allowed_ones_on_star_host_returns_an_error() {
-  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+  HostKeyAlgorithms weak-host-key-algorithm
 Host *
-  HostKeyAlgorithms weak-host-key-algorithm,ssh-rsa,other-weak-host-key-algorithm
+  HostKeyAlgorithms weak-host-key-algorithm
 __EOF__
 
   ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
-  expected_message="ERROR: HostKeyAlgorithms 'weak-host-key-algorithm' should be avoided for host \*"
-  expected_second_message="ERROR: HostKeyAlgorithms 'other-weak-host-key-algorithm' should be avoided for host \*"
 
-  assert 'grep "$expected_message" ${RESULT}'
-  assert 'grep "$expected_second_message" ${RESULT}'
+  expected_warning_message="WARNING: HostKeyAlgorithms should be set to 'ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa' for host hostname.com"
+  expected_error_message="ERROR: HostKeyAlgorithms should be set to 'ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa' for host \*"
+
+  assert 'grep "$expected_warning_message" ${RESULT}'
+  assert 'grep "$expected_error_message" ${RESULT}'
 }
 
-test_missing_host_key_algorithms_on_star_host_returns_an_error() {
+test_missing_host_key_algorithms_on_any_host_is_reported() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com
+Host *
+  HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com
+__EOF__
+
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
+  expected_warning_message="WARNING: HostKeyAlgorithms should be set to 'ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa' for host hostname.com"
+  expected_error_message="ERROR: HostKeyAlgorithms should be set to 'ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa' for host \*"
+
+  assert 'grep "$expected_warning_message" ${RESULT}'
+  assert 'grep "$expected_error_message" ${RESULT}'
+}
+
+test_host_key_algorithms_in_wrong_order_on_any_host_is_reported() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  HostKeyAlgorithms ssh-ed25519,ssh-rsa,ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com
+Host *
+  HostKeyAlgorithms ssh-ed25519,ssh-rsa,ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com
+__EOF__
+
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
+  expected_warning_message="WARNING: HostKeyAlgorithms should be set to 'ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa' for host hostname.com"
+  expected_error_message="ERROR: HostKeyAlgorithms should be set to 'ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa' for host \*"
+
+  assert 'grep "$expected_warning_message" ${RESULT}'
+  assert 'grep "$expected_error_message" ${RESULT}'
+}
+
+test_missing_host_key_algorithms_statement_on_star_host_returns_an_error() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host *
   Username yoloer
 __EOF__
 
   ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
-  expected_message="ERROR: HostKeyAlgorithms are missing for host \*"
+  expected_message="ERROR: HostKeyAlgorithms is missing for host \*"
 
   assert 'grep "$expected_message" ${RESULT}'
 }
