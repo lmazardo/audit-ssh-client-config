@@ -9,7 +9,7 @@ Host hostname.com
 __EOF__
 
   ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
-  expected_message="WARNING: PubkeyAuthentication is set to 'no' for host hostname.com"
+  expected_message="WARNING: PubkeyAuthentication should be set to 'yes' for host hostname.com"
 
   assert 'grep "$expected_message" ${RESULT}'
 }
@@ -21,7 +21,7 @@ Host *
 __EOF__
 
   ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
-  expected_message="ERROR: PubkeyAuthentication is set to 'no' for host \*"
+  expected_message="ERROR: PubkeyAuthentication should be set to 'yes' for host \*"
 
   assert 'grep "$expected_message" ${RESULT}'
 }

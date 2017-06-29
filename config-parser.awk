@@ -46,7 +46,7 @@ END {
       if (parameter_value == "" && host_value == "*") {
         printf "%s: %s is missing for host %s\n", level, boolean_parameter, host_value
       } else if (parameter_value != "" && parameter_value != expected_value) {
-        printf "%s: %s is set to '%s' for host %s\n", level, boolean_parameter, parameter_value, host_value
+        printf "%s: %s should be set to '%s' for host %s\n", level, boolean_parameter, expected_value, host_value
       }
     }
 

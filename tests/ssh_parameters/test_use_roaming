@@ -8,7 +8,7 @@ Host hostname.com
 __EOF__
 
   ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
-  expected_message="WARNING: UseRoaming is set to 'yes' for host hostname.com"
+  expected_message="WARNING: UseRoaming should be set to 'no' for host hostname.com"
 
   assert 'grep "$expected_message" ${RESULT}'
 }
@@ -20,7 +20,7 @@ Host *
 __EOF__
 
   ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
-  expected_message="ERROR: UseRoaming is set to 'yes' for host \*"
+  expected_message="ERROR: UseRoaming should be set to 'no' for host \*"
 
   assert 'grep "$expected_message" ${RESULT}'
 }
