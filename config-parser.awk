@@ -28,47 +28,34 @@ END {
   for (host in hosts) {
     host_value = hosts[host]
 
-    # These parameters can take boolean values ('yes' or 'no')
-    pwd_auth_value = hosts_params[host_value, "PasswordAuthentication"]
-    chall_resp_auth_value = hosts_params[host_value, "ChallengeResponseAuthentication"]
-    pubkey_auth_value = hosts_params[host_value, "PubkeyAuthentication"]
-    use_roaming_value = hosts_params[host_value, "UseRoaming"]
-
-    # These parameters can take list of values, separated by a coma ','
-    kex_algorithms_values = hosts_params[host_value, "KexAlgorithms"]
-    ciphers_values = hosts_params[host_value, "Ciphers"]
-    host_key_algorithms_values = hosts_params[host_value, "HostKeyAlgorithms"]
-    macs_values = hosts_params[host_value, "MACs"]
-
     if (host_value == "*") {
       level="ERROR"
     } else {
       level="WARNING"
     }
 
-    if (pwd_auth_value == "" && host_value == "*") {
-      printf "%s: PasswordAuthentication is missing for host %s\n", level, host_value
-    } else if (pwd_auth_value == "yes") {
-      printf "%s: PasswordAuthentication is set to 'yes' for host %s\n", level, host_value
+
+    # These parameters can take boolean values ('yes' or 'no')
+    split("PasswordAuthentication ChallengeResponseAuthentication PubkeyAuthentication UseRoaming", boolean_parameters)
+    split("no no yes no", expected_values)
+    for (i in boolean_parameters) {
+      boolean_parameter = boolean_parameters[i]
+      parameter_value = hosts_params[host_value, boolean_parameter]
+      expected_value = expected_values[i]
+
+      if (parameter_value == "" && host_value == "*") {
+        printf "%s: %s is missing for host %s\n", level, boolean_parameter, host_value
+      } else if (parameter_value != "" && parameter_value != expected_value) {
+        printf "%s: %s is set to '%s' for host %s\n", level, boolean_parameter, parameter_value, host_value
+      }
     }
 
-    if (chall_resp_auth_value == "" && host_value == "*") {
-      printf "%s: ChallengeResponseAuthentication is missing for host %s\n", level, host_value
-    } else if (chall_resp_auth_value == "yes") {
-      printf "%s: ChallengeResponseAuthentication is set to 'yes' for host %s\n", level, host_value
-    }
 
-    if (pubkey_auth_value == "" && host_value == "*") {
-      printf "%s: PubkeyAuthentication is missing for host %s\n", level, host_value
-    } else if (pubkey_auth_value == "no") {
-      printf "%s: PubkeyAuthentication is set to 'no' for host %s\n", level, host_value
-    }
-
-    if (use_roaming_value == "" && host_value == "*") {
-      printf "%s: UseRoaming is missing for host %s\n", level, host_value
-    } else if (use_roaming_value == "yes") {
-      printf "%s: UseRoaming is set to 'yes' for host %s\n", level, host_value
-    }
+    # These parameters can take list of values, separated by a coma ','
+    kex_algorithms_values = hosts_params[host_value, "KexAlgorithms"]
+    ciphers_values = hosts_params[host_value, "Ciphers"]
+    host_key_algorithms_values = hosts_params[host_value, "HostKeyAlgorithms"]
+    macs_values = hosts_params[host_value, "MACs"]
 
 
     if (kex_algorithms_values == "" && host_value == "*") {
