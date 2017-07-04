@@ -8,7 +8,6 @@ $1 == "Host" {
   host = $2
 
   hosts[count] = host
-  hosts_params[host] = ""
 
   count++
 }
