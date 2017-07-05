@@ -1,4 +1,11 @@
 #!/usr/bin/awk -f
+function is_in_array(item, array) {
+  is_present = 0
+  for (i in array) {
+    if (item == array[i]) { is_present = 1 }
+  }
+  return is_present
+}
 
 BEGIN {
   count = 1
@@ -7,7 +14,10 @@ BEGIN {
 $1 == "Host" {
   host = $2
 
-  hosts[count] = host
+  # Do not duplicate host entries
+  if (!is_in_array(host, hosts)) {
+    hosts[count] = host
+  }
 
   count++
 }
@@ -20,7 +30,11 @@ $1 == "Ciphers" ||
 $1 == "PubkeyAuthentication" ||
 $1 == "MACs" ||
 $1 == "UseRoaming" {
-  hosts_params[host, $1] = $2
+
+  # Do not override a value that has been already set
+  if (hosts_params[host, $1] == "") {
+    hosts_params[host, $1] = $2
+  }
 }
 
 END {

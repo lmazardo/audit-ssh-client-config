@@ -1,0 +1,71 @@
+test_only_report_the_first_value_of_a_parameter() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  PasswordAuthentication yes
+  PasswordAuthentication yes
+__EOF__
+
+  "${MAIN}" "${FAKE_BAD_CONFIG}" > "${RESULT}"
+
+  assert_equals 1 "$(wc -l "${RESULT}" | cut -d' ' -f1)"
+}
+
+test_only_report_the_first_value_of_a_parameter_even_in_duplicated_host_entries() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  PasswordAuthentication yes
+
+Host hostname.com
+  PasswordAuthentication yes
+__EOF__
+
+  "${MAIN}" "${FAKE_BAD_CONFIG}" > "${RESULT}"
+
+  assert_equals 1 "$(wc -l "${RESULT}" | cut -d' ' -f1)"
+}
+
+test_all_parameters_are_reported_even_in_duplicated_host_entries() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  PasswordAuthentication yes
+
+Host hostname.com
+  ChallengeResponseAuthentication yes
+__EOF__
+
+  "${MAIN}" "${FAKE_BAD_CONFIG}" > "${RESULT}"
+
+  assert_equals 2 "$(wc -l "${RESULT}" | cut -d' ' -f1)"
+}
+
+test_parameters_value_is_not_overwritten() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  PasswordAuthentication yes
+  PasswordAuthentication no
+__EOF__
+
+  "${MAIN}" "${FAKE_BAD_CONFIG}" > "${RESULT}"
+
+  expected_message="WARNING: PasswordAuthentication should be set to 'no' for host hostname.com"
+
+  assert 'grep "$expected_message" ${RESULT}'
+  assert_equals 1 "$(wc -l "${RESULT}" | cut -d' ' -f1)"
+}
+
+test_parameters_value_is_not_overwritten_even_in_duplicated_host_entries() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  PasswordAuthentication yes
+
+Host hostname.com
+  PasswordAuthentication no
+__EOF__
+
+  "${MAIN}" "${FAKE_BAD_CONFIG}" > "${RESULT}"
+
+  expected_message="WARNING: PasswordAuthentication should be set to 'no' for host hostname.com"
+
+  assert 'grep "$expected_message" ${RESULT}'
+  assert_equals 1 "$(wc -l "${RESULT}" | cut -d' ' -f1)"
+}

@@ -19,6 +19,8 @@ source "$TESTS_DIR/ssh_parameters/test_use_roaming"
 
 source "$TESTS_DIR/test_script_usage"
 
+source "$TESTS_DIR/test_first_parameter_value_is_the_only_one_considered"
+
 test_each_message_is_displayed_only_once() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host *
