@@ -4,6 +4,7 @@ TESTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 setup() {
   MAIN="$TESTS_DIR/../audit-ssh-config.sh"
   FAKE_BAD_CONFIG="$TESTS_DIR/fake_bad_config"
+  FAKE_BAD_CONFIG_2="$TESTS_DIR/fake_bad_config_2"
   RESULT="$TESTS_DIR/result"
 }
 
@@ -20,6 +21,7 @@ source "$TESTS_DIR/ssh_parameters/test_use_roaming"
 source "$TESTS_DIR/test_script_usage"
 
 source "$TESTS_DIR/test_first_parameter_value_is_the_only_one_considered"
+source "$TESTS_DIR/test_multiple_files"
 
 test_each_message_is_displayed_only_once() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"
@@ -48,5 +50,6 @@ __EOF__
 
 teardown() {
   rm "${FAKE_BAD_CONFIG}" &> /dev/null
+  rm "${FAKE_BAD_CONFIG_2}" &> /dev/null
   rm "${RESULT}"* &> /dev/null
 }

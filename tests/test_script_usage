@@ -10,8 +10,8 @@ test_explains_how_to_use_if_no_config_file_is_given() {
 test_h_option_displays_help_message() {
   "${MAIN}" -h &> "$RESULT"
 
-  expected_message="usage : audit-ssh-config.sh [-h] CONFIG_FILE
-audit an ssh client configuration file
+  expected_message="usage : audit-ssh-config.sh [-h] CONFIG_FILE ...
+audit ssh client configuration file(s)
 --warning = filter messages to only display WARNINGs
 --error = filter messages to only display ERRORs
 -h = display this help"

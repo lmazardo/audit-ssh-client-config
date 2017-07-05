@@ -30,8 +30,7 @@ $1 == "Ciphers" ||
 $1 == "PubkeyAuthentication" ||
 $1 == "MACs" ||
 $1 == "UseRoaming" {
-
-  # Do not override a value that has been already set
+  # Do not override a value that has aleardy been set
   if (hosts_params[host, $1] == "") {
     hosts_params[host, $1] = $2
   }
