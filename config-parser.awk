@@ -8,20 +8,25 @@ function is_in_array(item, array) {
 }
 
 BEGIN {
-  host = "*"
-  hosts[1] = host
+  concerned_hosts[1] = "*"
+  hosts[1] = "*"
   count = 2
 }
 
 $1 == "Host" {
-  host = $2
+  $1 = ""
+  split(substr($0,2), concerned_hosts)
 
-  # Do not duplicate host entries
-  if (!is_in_array(host, hosts)) {
-    hosts[count] = host
+  for (i in concerned_hosts) {
+    host = concerned_hosts[i]
+
+    # Do not duplicate host entries
+    if (!is_in_array(host, hosts)) {
+      hosts[count] = host
+    }
+
+    count++
   }
-
-  count++
 }
 
 $1 == "PasswordAuthentication" ||
@@ -33,11 +38,15 @@ $1 == "PubkeyAuthentication" ||
 $1 == "MACs" ||
 $1 == "UseRoaming" {
   # When we start a new file, raw parameters are affected to "Host *"
-  if (NR != FNR && FNR == 1) { host = "*" }
+  if (NR != FNR && FNR == 1) { concerned_hosts[1] = "*" }
 
-  # Do not override a value that has aleardy been set
-  if (hosts_params[host, $1] == "") {
-    hosts_params[host, $1] = $2
+  for (i in concerned_hosts) {
+    host = concerned_hosts[i]
+
+    # Do not override a value that has aleardy been set
+    if (hosts_params[host, $1] == "") {
+      hosts_params[host, $1] = $2
+    }
   }
 }
 

@@ -26,6 +26,24 @@ source "$TESTS_DIR/test_first_parameter_value_is_the_only_one_considered"
 source "$TESTS_DIR/test_multiple_files"
 source "$TESTS_DIR/test_default_parameters_are_set"
 
+
+test_multiple_hosts() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host A B C
+  PasswordAuthentication yes
+__EOF__
+
+  "${MAIN}" "${FAKE_BAD_CONFIG}" > "${RESULT}"
+
+  expected_message_for_A="WARNING: PasswordAuthentication should be set to 'no' for host A"
+  expected_message_for_B="WARNING: PasswordAuthentication should be set to 'no' for host B"
+  expected_message_for_C="WARNING: PasswordAuthentication should be set to 'no' for host C"
+
+  assert 'grep "$expected_message_for_A" ${RESULT}'
+  assert 'grep "$expected_message_for_B" ${RESULT}'
+  assert 'grep "$expected_message_for_C" ${RESULT}'
+}
+
 test_each_message_is_displayed_only_once() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host *
