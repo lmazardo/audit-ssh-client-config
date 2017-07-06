@@ -42,10 +42,10 @@ $1 == "UseRoaming" {
 }
 
 END {
-  for (host in hosts) {
-    host_value = hosts[host]
+  for (i in hosts) {
+    host = hosts[i]
 
-    if (host_value == "*") {
+    if (host == "*") {
       level="ERROR"
     } else {
       level="WARNING"
@@ -65,13 +65,13 @@ END {
 
     for (i in parameters) {
       parameter_name = parameters[i]
-      parameter_value = hosts_params[host_value, parameter_name]
+      parameter_value = hosts_params[host, parameter_name]
       expected_value = expected_values[i]
 
-      if (parameter_value == "" && host_value == "*") {
-        printf "%s: %s is missing for host %s\n", level, parameter_name, host_value
+      if (parameter_value == "" && host == "*") {
+        printf "%s: %s is missing for host %s\n", level, parameter_name, host
       } else if (parameter_value != "" && parameter_value != expected_value) {
-        printf "%s: %s should be set to '%s' for host %s\n", level, parameter_name, expected_value, host_value
+        printf "%s: %s should be set to '%s' for host %s\n", level, parameter_name, expected_value, host
       }
     }
   }
