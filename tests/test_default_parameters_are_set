@@ -1,0 +1,43 @@
+test_raw_parameters_are_set_to_star_host_by_default() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+PasswordAuthentication yes
+__EOF__
+
+  "${MAIN}" "${FAKE_BAD_CONFIG}" > "${RESULT}"
+  expected_message="ERROR: PasswordAuthentication should be set to 'no' for host \*"
+
+  assert 'grep "$expected_message" ${RESULT}'
+}
+
+test_star_host_is_mandatory() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  PasswordAuthentication no
+__EOF__
+
+  "${MAIN}" "${FAKE_BAD_CONFIG}" > "${RESULT}"
+
+  assert_equals 8 "$(grep -c ERROR "${RESULT}")"
+}
+
+test_star_host_parameters_present_in_later_file_are_counted() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  User yolo
+__EOF__
+
+  "${MAIN}" "${FAKE_BAD_CONFIG}" "${GOOD_STAR_HOST_CONFIG}" > "${RESULT}"
+
+  assert_equals 0 "$(wc -l "${RESULT}" | cut -d' ' -f1)"
+}
+
+test_raw_star_host_parameters_present_in_later_file_are_counted() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  User yolo
+__EOF__
+
+  "${MAIN}" "${FAKE_BAD_CONFIG}" "${RAW_GOOD_STAR_HOST_CONFIG}" > "${RESULT}"
+
+  assert_equals 0 "$(wc -l "${RESULT}" | cut -d' ' -f1)"
+}

@@ -8,7 +8,9 @@ function is_in_array(item, array) {
 }
 
 BEGIN {
-  count = 1
+  host = "*"
+  hosts[1] = host
+  count = 2
 }
 
 $1 == "Host" {
@@ -30,6 +32,9 @@ $1 == "Ciphers" ||
 $1 == "PubkeyAuthentication" ||
 $1 == "MACs" ||
 $1 == "UseRoaming" {
+  # When we start a new file, raw parameters are affected to "Host *"
+  if (NR != FNR && FNR == 1) { host = "*" }
+
   # Do not override a value that has aleardy been set
   if (hosts_params[host, $1] == "") {
     hosts_params[host, $1] = $2

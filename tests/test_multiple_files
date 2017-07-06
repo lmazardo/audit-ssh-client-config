@@ -4,7 +4,8 @@ Host hostname.com
   PasswordAuthentication yes
 __EOF__
 
-  cat << __EOF__ >"${FAKE_BAD_CONFIG_2}"
+
+  cat << __EOF__ - "${GOOD_STAR_HOST_CONFIG}" >/home/xavier/Documents/Workspace/ssh-config-scanner/tests/fake_bad_config_2
 Host hostname.com
   ChallengeResponseAuthentication yes
 __EOF__
@@ -20,7 +21,7 @@ Host hostname.com
   PasswordAuthentication yes
 __EOF__
 
-  cat << __EOF__ >"${FAKE_BAD_CONFIG_2}"
+  cat << __EOF__ - "${GOOD_STAR_HOST_CONFIG}" >"${FAKE_BAD_CONFIG_2}"
 Host hostname.com
   PasswordAuthentication yes
 __EOF__
@@ -36,7 +37,7 @@ Host hostname.com
   PasswordAuthentication yes
 __EOF__
 
-  cat << __EOF__ >"${FAKE_BAD_CONFIG_2}"
+  cat << __EOF__ - "${GOOD_STAR_HOST_CONFIG}" >"${FAKE_BAD_CONFIG_2}"
 Host hostname.com
   ChallengeResponseAuthentication yes
 __EOF__
@@ -52,7 +53,7 @@ Host hostname.com
   PasswordAuthentication yes
 __EOF__
 
-  cat << __EOF__ >"${FAKE_BAD_CONFIG_2}"
+  cat << __EOF__ - "${GOOD_STAR_HOST_CONFIG}" >"${FAKE_BAD_CONFIG_2}"
 Host hostname.com
   PasswordAuthentication no
 __EOF__
