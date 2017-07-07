@@ -23,5 +23,5 @@ Therefore, the order in which you pass the different configuration files to `aud
 
 ```bash
 cd tests/
-./bash_unit test_main.sh
+./bash_unit {,*/}test_*
 ```
