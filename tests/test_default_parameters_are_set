@@ -1,3 +1,4 @@
+source lib_test.sh
 test_raw_parameters_are_set_to_star_host_by_default() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 PasswordAuthentication yes
