@@ -1,5 +1,3 @@
-#!/bin/bash
-
 source lib_test.sh
 
 test_multiple_hosts() {
@@ -41,11 +39,4 @@ __EOF__
   "${MAIN}" "${FAKE_BAD_CONFIG}" > "${RESULT}"
 
   assert_equals 0 "$(wc -l "${RESULT}" | cut -d' ' -f1)"
-}
-
-
-teardown() {
-  rm "${FAKE_BAD_CONFIG}" &> /dev/null
-  rm "${FAKE_BAD_CONFIG_2}" &> /dev/null
-  rm "${RESULT}"* &> /dev/null
 }

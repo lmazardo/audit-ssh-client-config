@@ -1,4 +1,3 @@
-#!/bin/bash
 TESTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 MAIN="$TESTS_DIR/../audit-ssh-config.sh"
