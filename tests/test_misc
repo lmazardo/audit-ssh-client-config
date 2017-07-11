@@ -7,7 +7,9 @@ Host hostname.com
 __EOF__
 
   ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
-  expected_message="WARNING: PasswordAuthentication should be set to 'no' for host hostname.com"
+  expected_message="
+On hostname.com:
+  WARNING: PasswordAuthentication should be set to 'no'"
 
   assert_equals "$expected_message" "$(cat ${RESULT})"
 }

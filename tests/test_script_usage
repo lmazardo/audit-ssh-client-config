@@ -35,6 +35,17 @@ __EOF__
   assert_fail "grep ERROR ${RESULT}"
 }
 
+test_warning_option_still_shows_host_header() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  ChallengeResponseAuthentication yes
+__EOF__
+
+  "${MAIN}" --warning "${FAKE_BAD_CONFIG}" > "${RESULT}"
+
+  assert 'grep "On hostname.com:" "${RESULT}"'
+}
+
 test_error_option_only_displays_warnings() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host hostname.com
@@ -46,4 +57,15 @@ __EOF__
   "${MAIN}" --error "${FAKE_BAD_CONFIG}" > "${RESULT}"
 
   assert_fail "grep WARNING ${RESULT}"
+}
+
+test_error_option_still_shows_host_header() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host *
+    ChallengeResponseAuthentication yes
+__EOF__
+
+  "${MAIN}" --error "${FAKE_BAD_CONFIG}" > "${RESULT}"
+
+  assert 'grep "On \*:" "${RESULT}"'
 }

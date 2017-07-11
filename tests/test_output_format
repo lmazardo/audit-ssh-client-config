@@ -1,0 +1,27 @@
+source lib_test
+
+test_shows_related_host_on_top_of_reported_offenses() {
+  cat << __EOF__ >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  PasswordAuthentication yes
+  Ciphers weak-cipher
+__EOF__
+
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
+  expected_message="
+On *:
+  ERROR: PasswordAuthentication is missing
+  ERROR: ChallengeResponseAuthentication is missing
+  ERROR: PubkeyAuthentication is missing
+  ERROR: UseRoaming is missing
+  ERROR: KexAlgorithms is missing
+  ERROR: Ciphers is missing
+  ERROR: HostKeyAlgorithms is missing
+  ERROR: MACs is missing
+
+On hostname.com:
+  WARNING: PasswordAuthentication should be set to 'no'
+  WARNING: Ciphers should be set to 'chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr'"
+
+  assert_equals "$expected_message" "$(cat ${RESULT})"
+}

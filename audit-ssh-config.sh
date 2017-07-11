@@ -42,4 +42,7 @@ else
 fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-"$DIR/config-parser.awk" "${config_files[@]}" | grep --color=never "$filter"
+
+"$DIR/config-parser.awk" "${config_files[@]}" \
+  | grep --color=never "$filter" \
+  | sed -r 's/(WARNINGS|ERRORS) On/On/'

@@ -54,6 +54,8 @@ END {
   for (i in hosts) {
     host = hosts[i]
 
+    not_yet_reported = 1
+
     if (host == "*") {
       level="ERROR"
     } else {
@@ -78,9 +80,13 @@ END {
       expected_value = expected_values[i]
 
       if (parameter_value == "" && host == "*") {
-        printf "%s: %s is missing for host %s\n", level, parameter_name, host
+        if (not_yet_reported) { printf "\nERRORS On %s:\n", host
+                                not_yet_reported = 0 }
+        printf "  %s: %s is missing\n", level, parameter_name, host
       } else if (parameter_value != "" && parameter_value != expected_value) {
-        printf "%s: %s should be set to '%s' for host %s\n", level, parameter_name, expected_value, host
+        if (not_yet_reported) { printf "\nWARNINGS On %s:\n", host
+                                not_yet_reported = 0 }
+        printf "  %s: %s should be set to '%s'\n", level, parameter_name, expected_value, host
       }
     }
   }
