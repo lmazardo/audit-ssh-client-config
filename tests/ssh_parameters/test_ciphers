@@ -5,7 +5,7 @@
 # chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,
 # aes256-ctr,aes192-ctr,aes128-ctr
 #
-source ../lib_test.sh
+source ../lib_test
 
 test_ciphers_different_from_allowed_ones_on_any_host_is_reported() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"

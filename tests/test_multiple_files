@@ -1,4 +1,5 @@
-source lib_test.sh
+source lib_test
+
 test_read_from_multiple_files() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host hostname.com

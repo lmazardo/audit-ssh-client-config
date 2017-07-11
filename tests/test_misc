@@ -1,4 +1,4 @@
-source lib_test.sh
+source lib_test
 
 test_multiple_hosts() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"

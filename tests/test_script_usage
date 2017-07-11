@@ -1,4 +1,5 @@
-source lib_test.sh
+source lib_test
+
 test_explains_how_to_use_if_no_config_file_is_given() {
   "${MAIN}" &> "$RESULT"
 

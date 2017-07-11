@@ -5,7 +5,7 @@
 # ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,
 # ssh-rsa
 #
-source ../lib_test.sh
+source ../lib_test
 
 test_host_key_algorithms_different_from_allowed_ones_on_any_host_is_reported() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"

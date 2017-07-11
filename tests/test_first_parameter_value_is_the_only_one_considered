@@ -1,4 +1,5 @@
-source lib_test.sh
+source lib_test
+
 test_only_report_the_first_value_of_a_parameter() {
   cat << __EOF__ - "${GOOD_STAR_HOST_CONFIG}" >"${FAKE_BAD_CONFIG}"
 Host hostname.com

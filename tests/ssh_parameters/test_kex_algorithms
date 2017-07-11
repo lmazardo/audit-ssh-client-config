@@ -4,7 +4,7 @@
 # Allowed key exchange algorithms:
 # curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
 #
-source ../lib_test.sh
+source ../lib_test
 
 test_kexalgorithms_different_from_allowed_ones_on_any_host_is_reported() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"

@@ -1,7 +1,7 @@
 #
 # PubkeyAuthentication
 #
-source ../lib_test.sh
+source ../lib_test
 
 test_pubkey_authentication_set_to_no_on_a_specific_host_returns_a_warning() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"
