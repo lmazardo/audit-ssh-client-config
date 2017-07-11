@@ -6,7 +6,8 @@ PasswordAuthentication yes
 __EOF__
 
   "${MAIN}" "${FAKE_BAD_CONFIG}" > "${RESULT}"
-  expected_message="ERROR: PasswordAuthentication should be set to 'no' for host \*"
+
+  expected_message="ERROR: PasswordAuthentication should be set to 'no'"
 
   assert 'grep "$expected_message" ${RESULT}'
 }

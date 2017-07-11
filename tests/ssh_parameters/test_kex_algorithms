@@ -15,8 +15,9 @@ Host *
 __EOF__
 
   ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
-  expected_warning_message="WARNING: KexAlgorithms should be set to 'curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256' for host hostname.com"
-  expected_error_message="ERROR: KexAlgorithms should be set to 'curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256' for host \*"
+
+  expected_warning_message="WARNING: KexAlgorithms should be set to 'curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256'"
+  expected_error_message="ERROR: KexAlgorithms should be set to 'curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256'"
 
   assert 'grep "$expected_warning_message" ${RESULT}'
   assert 'grep "$expected_error_message" ${RESULT}'
@@ -31,8 +32,9 @@ Host *
 __EOF__
 
   ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
-  expected_warning_message="WARNING: KexAlgorithms should be set to 'curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256' for host hostname.com"
-  expected_error_message="ERROR: KexAlgorithms should be set to 'curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256' for host \*"
+
+  expected_warning_message="WARNING: KexAlgorithms should be set to 'curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256'"
+  expected_error_message="ERROR: KexAlgorithms should be set to 'curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256'"
 
   assert 'grep "$expected_warning_message" ${RESULT}'
   assert 'grep "$expected_error_message" ${RESULT}'
@@ -47,8 +49,9 @@ Host *
 __EOF__
 
   ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
-  expected_warning_message="WARNING: KexAlgorithms should be set to 'curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256' for host hostname.com"
-  expected_error_message="ERROR: KexAlgorithms should be set to 'curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256' for host \*"
+
+  expected_warning_message="WARNING: KexAlgorithms should be set to 'curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256'"
+  expected_error_message="ERROR: KexAlgorithms should be set to 'curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256'"
 
   assert 'grep "$expected_warning_message" ${RESULT}'
   assert 'grep "$expected_error_message" ${RESULT}'
@@ -61,7 +64,8 @@ Host *
 __EOF__
 
   ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
-  expected_message="ERROR: KexAlgorithms is missing for host \*"
+
+  expected_message="ERROR: KexAlgorithms is missing"
 
   assert 'grep "$expected_message" ${RESULT}'
 }

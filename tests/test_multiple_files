@@ -62,7 +62,7 @@ __EOF__
 
   "${MAIN}" "${FAKE_BAD_CONFIG}" "${FAKE_BAD_CONFIG_2}" > "${RESULT}"
 
-  expected_message="WARNING: PasswordAuthentication should be set to 'no' for host hostname.com"
+  expected_message="WARNING: PasswordAuthentication should be set to 'no'"
 
   assert 'grep "$expected_message" ${RESULT}'
   assert_equals 1 "$(wc -l "${RESULT}" | cut -d' ' -f1)"

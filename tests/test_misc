@@ -1,5 +1,17 @@
 source lib_test
 
+test_mentions_concerned_host_before_reported_content() {
+  cat << __EOF__ - "${GOOD_STAR_HOST_CONFIG}" >"${FAKE_BAD_CONFIG}"
+Host hostname.com
+  PasswordAuthentication yes
+__EOF__
+
+  ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
+  expected_message="WARNING: PasswordAuthentication should be set to 'no' for host hostname.com"
+
+  assert_equals "$expected_message" "$(cat ${RESULT})"
+}
+
 test_multiple_hosts() {
   cat << __EOF__ >"${FAKE_BAD_CONFIG}"
 Host A B C
@@ -8,9 +20,9 @@ __EOF__
 
   "${MAIN}" "${FAKE_BAD_CONFIG}" > "${RESULT}"
 
-  expected_message_for_A="WARNING: PasswordAuthentication should be set to 'no' for host A"
-  expected_message_for_B="WARNING: PasswordAuthentication should be set to 'no' for host B"
-  expected_message_for_C="WARNING: PasswordAuthentication should be set to 'no' for host C"
+  expected_message_for_A="WARNING: PasswordAuthentication should be set to 'no'"
+  expected_message_for_B="WARNING: PasswordAuthentication should be set to 'no'"
+  expected_message_for_C="WARNING: PasswordAuthentication should be set to 'no'"
 
   assert 'grep "$expected_message_for_A" ${RESULT}'
   assert 'grep "$expected_message_for_B" ${RESULT}'
