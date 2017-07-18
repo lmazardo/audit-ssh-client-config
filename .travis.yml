@@ -1,0 +1,5 @@
+---
+language: bash
+dist: trusty
+script:
+  - ./tests/bash_unit tests/{,*/}test_*
