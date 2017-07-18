@@ -1,5 +1,7 @@
 # SSH client configuration scanner
 
+[![Build Status](https://travis-ci.org/multimediabs/audit-ssh-client-config.svg?branch=master)](https://travis-ci.org/multimediabs/audit-ssh-client-config)
+
 Scan ssh client configuration file(s) to report [good practices](https://stribika.github.io/2015/01/04/secure-secure-shell.html) compliance.
 
 ## usage
