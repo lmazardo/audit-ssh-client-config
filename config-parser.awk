@@ -1,4 +1,4 @@
-#!/usr/bin/awk -f
+#!/usr/bin/gawk -f
 function is_in_array(item, array) {
   is_present = 0
   for (i in array) {
@@ -8,6 +8,8 @@ function is_in_array(item, array) {
 }
 
 BEGIN {
+  PROCINFO["sorted_in"] = "@ind_num_asc"
+
   concerned_hosts[1] = "*"
   hosts[1] = "*"
   count = 2
