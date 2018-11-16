@@ -3,8 +3,8 @@
 #
 # Allowed MACs:
 # hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,
-# hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,
-# hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com
+# umac-128-etm@openssh.com,hmac-sha2-512,
+# hmac-sha2-256,umac-128@openssh.com
 #
 source ../lib_test
 
@@ -18,8 +18,8 @@ __EOF__
 
   ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
 
-  expected_warning_message="WARNING: MACs should be set to 'hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com'"
-  expected_error_message="ERROR: MACs should be set to 'hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com'"
+  expected_warning_message="WARNING: MACs should be set to 'hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com'"
+  expected_error_message="ERROR: MACs should be set to 'hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com'"
 
   assert 'grep "$expected_warning_message" ${RESULT}'
   assert 'grep "$expected_error_message" ${RESULT}'
@@ -35,8 +35,8 @@ __EOF__
 
   ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
 
-  expected_warning_message="WARNING: MACs should be set to 'hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com'"
-  expected_error_message="ERROR: MACs should be set to 'hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com'"
+  expected_warning_message="WARNING: MACs should be set to 'hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com'"
+  expected_error_message="ERROR: MACs should be set to 'hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com'"
 
   assert 'grep "$expected_warning_message" ${RESULT}'
   assert 'grep "$expected_error_message" ${RESULT}'
@@ -52,8 +52,8 @@ __EOF__
 
   ${MAIN} ${FAKE_BAD_CONFIG} > ${RESULT}
 
-  expected_warning_message="WARNING: MACs should be set to 'hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com'"
-  expected_error_message="ERROR: MACs should be set to 'hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com'"
+  expected_warning_message="WARNING: MACs should be set to 'hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com'"
+  expected_error_message="ERROR: MACs should be set to 'hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com'"
 
   assert 'grep "$expected_warning_message" ${RESULT}'
   assert 'grep "$expected_error_message" ${RESULT}'
